@@ -10,7 +10,7 @@
 # exit when command status not equal 0
 set -e
 
-# enable built-in if available
+# enable bash libs if available
 [[ -f /usr/lib/bash/realpath ]] && enable -f /usr/lib/bash/realpath realpath
 [[ -f /usr/lib/bash/dirname ]] && enable -f /usr/lib/bash/dirname dirname
 
@@ -53,7 +53,7 @@ _parse_params() {
         # skip loop interation?
         [[ $skip ]] && unset skip && continue
 
-        # remove first parameter before every case-in
+        # use $param as current and $1..n as nexts
         shift
 
         case $param in
@@ -160,10 +160,10 @@ _package() {
     # banana time
     banana -g "$filename"
 
-    # get desc file content
+    # get info/desc file content
     bananadesc="$(<"$bindir/info/desc")"
 
-    # do replaces
+    # replace info/desc content
     bananadesc="$(__desc_replace "$bananadesc" 'maintainer=' "$MAINTAINER")"
     bananadesc="$(__desc_replace "$bananadesc" 'license=' "$LICENSE")"
     : "$(fold -w 65 -s <<<"$DESCRIPTION")" # wrap long text
@@ -175,7 +175,7 @@ _package() {
     : "${_#*\'}"
     bananadesc="$(__desc_replace "$bananadesc" 'dep=(' "$_")"
 
-    # write desc file new content
+    # write info/desc new content
     printf '%s\n' "$bananadesc" >"$bindir/info/desc"
 
     # TODO: create pos.sh, pre.sh and rm.sh
