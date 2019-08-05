@@ -143,7 +143,7 @@ _build() {
     pushd $srcdir
 
     # execute recipe function
-    build
+    type -p build &>/dev/null && build
 
     popd
     printf '%s\n' "Sucesso: arquivos em ${tmpdir}/bin"
