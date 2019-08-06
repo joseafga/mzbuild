@@ -23,6 +23,8 @@ O *array* `makedeps` é um adicional as dependências do pacote, sendo essas nec
 
 Por fim temos as funções executadas em determinados momentos do processo. Atualmente há a função `build()`, executada logo após a extração, deve ser utilizada para a configuração e compilação da aplicação. Enquanto a função `package()` é executada após a `build()` e antes do empacotamento com o BananaPKG, deve ser utilizada para instalar/copiar os arquivos na `bindir` (variável que contém o caminho do diretório correspondente a raiz do pacote).
 
+> Veja exemplos em [mzbuild-packages](https://github.com/joseafga/mzbuild-packages)
+
 Dependências
 ----------
 - bash
