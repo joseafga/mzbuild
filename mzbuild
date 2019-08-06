@@ -37,6 +37,15 @@ __ask_confirmation() {
     [[ "$answer" =~ ^[sSyY] ]]
 }
 
+__checksum() {
+    if [[ "${1%% *}" == "$2" ]]; then
+        printf '%s\n' "Sucesso: checksum verificado."
+    else
+        printf '%s\n' 'Erro: checksum não confere.'
+        __ask_confirmation 'Continuar mesmo assim' || exit 1
+    fi
+}
+
 _show_version() {
     printf '%s\n' "mzbuild 0.1.0-alpha"
 }
@@ -102,29 +111,11 @@ _download() {
 }
 
 _checksum() {
-    # do md5 checksum
-    if [[ "$CHECKSUM_MD5" ]]; then
-        local check="$(md5sum "$1")"
+    [[ "$CHECKSUM_MD5" ]] && __checksum "$(md5sum "$1")" "$CHECKSUM_MD5"
+    [[ "$CHECKSUM_SHA256" ]] && __checksum "$(sha256sum "$1")" "$CHECKSUM_SHA256"
 
-        if [[ "${check%% *}" != "$CHECKSUM_MD5" ]]; then
-            printf '%s\n' 'Erro: checksum não confere.'
-            __ask_confirmation 'Continuar mesmo assim' || exit 1
-        else
-            printf '%s\n' "Sucesso: checksum verificado."
-        fi
-    fi
-
-    # do sha256 checksum
-    if [[ "$CHECKSUM_SHA256" ]]; then
-        local check="$(sha256sum "$1")"
-
-        if [[ "${check%% *}" != "$CHECKSUM_SHA256" ]]; then
-            printf '%s\n' 'Erro: checksum não confere.'
-            __ask_confirmation 'Continuar mesmo assim' || exit 1
-        else
-            printf '%s\n' "Sucesso: checksum verificado."
-        fi
-    fi
+    # prevent command status != 0
+    return 0
 }
 
 _extract() {
