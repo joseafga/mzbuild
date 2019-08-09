@@ -5,7 +5,7 @@ Automatiza diversas funções na criação de um pacote `.mz`, evitando repetiç
 
 *Read this in other languages: [English](README.md), [Português (BR)](README.pt-BR.md).*
 
-Porquê?
+Por que?
 ----------
 Inspirado por projetos como o *Makepkg*, *rpmbuild*, *SlackBuilds*, entre outros, junto a vontade de contribuir para os projetos [BananaPKG](https://bananapkg.github.io/) e [Mazon OS](https://github.com/mazonos/), então surgiu o projeto *mzbuild*.
 

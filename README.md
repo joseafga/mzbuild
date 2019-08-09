@@ -1,7 +1,7 @@
 MZBUILD
 ==========
 Build helper for BananaPKG.  
-It automates several functions in creating a `.mz` package avoiding unnecessary repetition and making it easier to maintain the package in future updates.
+It automates several `.mz` package creation functions avoiding unnecessary repetition and making it easier to maintain.
 
 *Read this in other languages: [English](README.md), [Português (BR)](README.pt-BR.md).*
 
