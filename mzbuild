@@ -94,6 +94,9 @@ _parse_params() {
                     _parse_params "${params[@]}" "$@"
                     break
                 fi
+
+                # no matchs :(
+                printf '%s\n' "Parâmetro não reconhecido: $param"
                 ;;
         esac
     done
