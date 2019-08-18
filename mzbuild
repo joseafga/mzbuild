@@ -149,7 +149,7 @@ _extract() {
 }
 
 _build() {
-    _log 'Compilando ...........'
+    _log 'Compilando...........'
     pushd $srcdir
 
     # execute recipe function
