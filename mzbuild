@@ -188,7 +188,7 @@ _package() {
     bananadesc="$(__desc_replace "$bananadesc" 'dep=(' "$_")"
 
     # write info/desc new content
-    printf '%s\n' "$bananadesc" >"$bindir/info/desc"
+    printf '%s\n' "$bananadesc" >|"$bindir/info/desc"
 
     # TODO: create pos.sh, pre.sh and rm.sh
 
