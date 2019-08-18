@@ -35,7 +35,7 @@ __desc_replace() {
 __ask_confirmation() {
     local answer
 
-    printf '%s' "${1}? [s/N]: "
+    printf '%s' "${1} Continuar? [s/N]: "
     read answer
 
     # return test exit code (zero if yes)
@@ -44,10 +44,9 @@ __ask_confirmation() {
 
 __checksum() {
     if [[ "${1%% *}" == "$2" ]]; then
-        _log 'Checksum verificado.' $LSUCCESS
+        _log 'Checksum do arquivo verificado.' $LSUCCESS
     else
-        _log 'Checksum não confere.' $LERROR
-        __ask_confirmation 'Continuar mesmo assim' || exit 1
+        __ask_confirmation "$(_log 'Checksum do arquivo não confere.' $LERROR)" || exit 1
     fi
 }
 
