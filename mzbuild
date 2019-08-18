@@ -140,9 +140,14 @@ _checksum() {
 }
 
 _extract() {
-    # TODO: check if recipe have extract function and run it
+    type -p extract &>/dev/null && extract
+
     # extract in source dir
-    tar -xvf "$1" --one-top-level=src
+    if [[ "$VERBOSE" == 'true' ]]; then
+        tar -xvf "$1" --one-top-level=src
+    else
+        tar -xf "$1" --one-top-level=src
+    fi
 }
 
 _build() {
