@@ -3,7 +3,7 @@
 # mzbuild - Build helper for bananapkg
 #
 # version:
-#   0.2.0a
+#   0.2.1a
 # author:
 #   José Almeida <jose.afga@gmail.com>
 
@@ -64,7 +64,7 @@ _log() {
 }
 
 _show_version() {
-    printf '%s\n' 'mzbuild 0.2.0-alpha'
+    printf '%s\n' 'mzbuild 0.2.1-alpha'
 }
 
 _show_help() {
@@ -264,7 +264,12 @@ _init() {
 # ===============
 
 main() {
-    # positional parameters parsing
+    # no parameters passed
+    [[ $# -eq 0 ]] && {
+        _show_help
+        exit 1
+    }
+
     _parse_params "$@"
 
     # get recipe paths
