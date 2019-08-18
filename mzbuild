@@ -208,7 +208,15 @@ _package() {
 }
 
 _install() {
+    # check if is already installed and remove it
+    for file in "/var/lib/banana/list/${NAME}-"*; do
+        # FIXME: possible false positve?
+        [[ -f $file ]] && banana -r -y "${NAME}"
+    done
+
     banana -i "${tmpdir}/$filename.mz"
+
+    return 0
 }
 
 _init() {
@@ -229,11 +237,15 @@ _init() {
     popd &>/dev/null
     printf '%s\n' "Pacote em ${tmpdir}/$filename.mz"
 
-    _log 'Instalando...'
-    pushd "$tmpdir" &>/dev/null
-    _install
-    popd &>/dev/null
-    _log 'Instalação concluída' $LSUCCESS
+    [[ "$INSTALL" == 'true' ]] && {
+        _log 'Instalando...'
+        pushd "$tmpdir" &>/dev/null
+        _install
+        popd &>/dev/null
+        _log 'Instalação concluída' $LSUCCESS
+    }
+
+    return 0
 }
 
 # MAIN
