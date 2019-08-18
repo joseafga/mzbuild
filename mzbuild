@@ -161,18 +161,22 @@ _extract() {
             tar -xf "$1" --one-top-level=src
         fi
     }
+
+    return 0
 }
 
 _build() {
     # execute recipe function
     type -p build &>/dev/null && build
+
+    return 0
 }
 
 _package() {
     # execute recipe function
     type -p package &>/dev/null && package
 
-    cd $bindir
+    cd "$bindir"
     # banana time
     banana -g "$filename"
 
@@ -197,22 +201,24 @@ _package() {
     # TODO: create pos.sh, pre.sh and rm.sh
 
     banana -c "$filename.mz" || _log "Houveram erros na criação do pacote." $LWARNING
+
+    return 0
 }
 
 _init() {
     _log 'Extraindo arquivos...'
-    pushd $tmpdir &>/dev/null
+    pushd "$tmpdir" &>/dev/null
     _extract "$filedir/$filename"
     popd &>/dev/null
 
     _log 'Compilando...........'
-    pushd $srcdir &>/dev/null
+    pushd "$srcdir" &>/dev/null
     _build
     popd &>/dev/null
-    _log "Arquivos em ${tmpdir}/bin" $LSUCCESS
+    _log "Arquivos em ${bindir}" $LSUCCESS
 
     _log 'Criando pacote...'
-    pushd $srcdir &>/dev/null
+    pushd "$srcdir" &>/dev/null
     _package
     popd &>/dev/null
     printf '%s\n' "Pacote em ${tmpdir}/$filename.mz"
