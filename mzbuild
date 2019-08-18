@@ -72,8 +72,9 @@ _parse_params() {
     local skip # if is set skip next loop interation
 
     # set default values (optional)
-    DOWNLOAD='true'
     VERBOSE='false'
+    DOWNLOAD='true'
+    CHECKSUM='true'
 
     for param in "$@"; do
         # skip loop interation?
@@ -85,6 +86,7 @@ _parse_params() {
         case $param in
             --force-download) DOWNLOAD='force' ;;
             --no-download) DOWNLOAD='false' ;;
+            --no-checksum) CHECKSUM='false' ;;
             -v | --verbose) VERBOSE='true' ;;
             -h | --help)
                 # TODO: build a help
@@ -218,14 +220,14 @@ main() {
 
     # download source in the same directory of recipe file
     [[ "$DOWNLOAD" != 'false' ]] && _download "$filedir/$filename.$extension"
-    _checksum "$filedir/$filename.$extension"
+    [[ "$CHECKSUM" != 'false' ]] && _checksum "$filedir/$filename.$extension"
 
     # exec as root only
     if [[ $UID -ne 0 ]]; then
         _log 'A partir daqui é necessário estar como root, faça o login...'
 
         # TODO: improve $filepath param pass
-        pkexec "$(realpath $0)" "$@" "$filepath" --no-download
+        pkexec "$(realpath $0)" "$@" "$filepath" --no-download --no-checksum
         exit 0
     fi
 
