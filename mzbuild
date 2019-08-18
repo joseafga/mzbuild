@@ -123,10 +123,19 @@ _parse_params() {
 
 _download() {
     # if file exists not download again
-    if [[ ! -f "$1" || "$DOWNLOAD" == 'force' ]]; then
+    if [[ ! -e "$1" || "$DOWNLOAD" == 'force' ]]; then
         _log 'Fazendo o download...'
-        # wget -cq --show-progress "${URL}" -O "$1"
-        curl -L --retry 5 --retry-max-time 60 "${URL}" -o "$1"
+
+        # execute recipe function OR this
+        type -p download &>/dev/null && download || {
+            # download based on url extension
+            if [[ "$extension" == 'git' ]]; then
+                git clone "$URL" "$1"
+            else
+                # wget -cq --show-progress "${URL}" -O "$1"
+                curl -L --retry 5 --retry-max-time 60 "$URL" -o "$1"
+            fi
+        }
     else
         _log "$1 arquivo já existe." $LWARNING
     fi
@@ -140,14 +149,18 @@ _checksum() {
 }
 
 _extract() {
-    type -p extract &>/dev/null && extract
+    # execute recipe function
+    type -p extract &>/dev/null && extract || {
+        # do nothing if .git
+        [[ "$extension" == 'git' ]] && return 0
 
-    # extract in source dir
-    if [[ "$VERBOSE" == 'true' ]]; then
-        tar -xvf "$1" --one-top-level=src
-    else
-        tar -xf "$1" --one-top-level=src
-    fi
+        # extract in source dir
+        if [[ "$VERBOSE" == 'true' ]]; then
+            tar -xvf "$1" --one-top-level=src
+        else
+            tar -xf "$1" --one-top-level=src
+        fi
+    }
 }
 
 _build() {
@@ -189,7 +202,7 @@ _package() {
 _init() {
     _log 'Extraindo arquivos...'
     pushd $tmpdir &>/dev/null
-    _extract "$filedir/$filename.$extension"
+    _extract "$filedir/$filename"
     popd &>/dev/null
 
     _log 'Compilando...........'
@@ -225,11 +238,11 @@ main() {
     fi
 
     filename="${NAME}-${VERSION}-${BUILD}"
-    extension="${URL#*$VERSION.}"
+    extension="${URL##*.}"
 
     # download source in the same directory of recipe file
-    [[ "$DOWNLOAD" != 'false' ]] && _download "$filedir/$filename.$extension"
-    [[ "$CHECKSUM" != 'false' ]] && _checksum "$filedir/$filename.$extension"
+    [[ "$DOWNLOAD" != 'false' ]] && _download "$filedir/$filename"
+    [[ "$CHECKSUM" != 'false' ]] && _checksum "$filedir/$filename"
 
     # exec as root only
     if [[ $UID -ne 0 ]]; then
