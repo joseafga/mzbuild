@@ -60,6 +60,8 @@ _log() {
         # only errors or higher
         [[ "$2" -ge 3 ]] && printf '%s\n' "${lmsg[$2]}${1}"
     fi
+
+    return 0
 }
 
 _show_version() {
@@ -72,7 +74,7 @@ _parse_params() {
 
     # set default values (optional)
     DOWNLOAD='true'
-    VERBOSE='true'
+    VERBOSE='false'
 
     for param in "$@"; do
         # skip loop interation?
@@ -133,35 +135,34 @@ _checksum() {
     [[ "$CHECKSUM_MD5" ]] && __checksum "$(md5sum "$1")" "$CHECKSUM_MD5"
     [[ "$CHECKSUM_SHA256" ]] && __checksum "$(sha256sum "$1")" "$CHECKSUM_SHA256"
 
-    # prevent command status != 0
     return 0
 }
 
 _extract() {
     _log 'Extraindo arquivos...'
-    pushd $tmpdir
+    pushd $tmpdir &>/dev/null
 
     # TODO: check if recipe have extract function and run it
     # extract in source dir
     tar -xvf "$1" --one-top-level=src
 
-    popd
+    popd &>/dev/null
 }
 
 _build() {
     _log 'Compilando...........'
-    pushd $srcdir
+    pushd $srcdir &>/dev/null
 
     # execute recipe function
     type -p build &>/dev/null && build
 
-    popd
+    popd &>/dev/null
     _log "Arquivos em ${tmpdir}/bin" $LSUCCESS
 }
 
 _package() {
     _log 'Criando pacote...'
-    pushd $srcdir
+    pushd $srcdir &>/dev/null
 
     # execute recipe function
     type -p package &>/dev/null && package
@@ -192,8 +193,8 @@ _package() {
 
     banana -c "$filename.mz"
 
-    popd
-    _log "Pacote em ${tmpdir}/$filename.mz" $LSUCCESS
+    popd &>/dev/null
+    printf '%s\n' "Pacote em ${tmpdir}/$filename.mz"
 }
 
 # MAIN
