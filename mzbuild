@@ -140,31 +140,17 @@ _checksum() {
 }
 
 _extract() {
-    _log 'Extraindo arquivos...'
-    pushd $tmpdir &>/dev/null
-
     # TODO: check if recipe have extract function and run it
     # extract in source dir
     tar -xvf "$1" --one-top-level=src
-
-    popd &>/dev/null
 }
 
 _build() {
-    _log 'Compilando...........'
-    pushd $srcdir &>/dev/null
-
     # execute recipe function
     type -p build &>/dev/null && build
-
-    popd &>/dev/null
-    _log "Arquivos em ${tmpdir}/bin" $LSUCCESS
 }
 
 _package() {
-    _log 'Criando pacote...'
-    pushd $srcdir &>/dev/null
-
     # execute recipe function
     type -p package &>/dev/null && package
 
@@ -193,9 +179,27 @@ _package() {
     # TODO: create pos.sh, pre.sh and rm.sh
 
     banana -c "$filename.mz" || _log "Houveram erros na criação do pacote." $LWARNING
+}
 
+_init() {
+    _log 'Extraindo arquivos...'
+    pushd $tmpdir &>/dev/null
+    _extract "$filedir/$filename.$extension"
+    popd &>/dev/null
+
+    _log 'Compilando...........'
+    pushd $srcdir &>/dev/null
+    _build
+    popd &>/dev/null
+    _log "Arquivos em ${tmpdir}/bin" $LSUCCESS
+
+    _log 'Criando pacote...'
+    pushd $srcdir &>/dev/null
+    _package
     popd &>/dev/null
     printf '%s\n' "Pacote em ${tmpdir}/$filename.mz"
+
+    # TODO: install option
 }
 
 # MAIN
@@ -243,11 +247,8 @@ main() {
     mkdir "$srcdir" "$bindir"
     cd "$tmpdir"
 
-    # now begin processes
-    _extract "$filedir/$filename.$extension"
-    _build
-    _package
-    # TODO: install option
+    # begin processes
+    _init
 }
 
 main "$@"
