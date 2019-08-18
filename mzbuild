@@ -190,7 +190,7 @@ _package() {
 
     # TODO: create pos.sh, pre.sh and rm.sh
 
-    banana -c "$filename.mz"
+    banana -c "$filename.mz" || _log "Houveram erros na criação do pacote." $LWARNING
 
     popd &>/dev/null
     printf '%s\n' "Pacote em ${tmpdir}/$filename.mz"
