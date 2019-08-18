@@ -75,6 +75,7 @@ _parse_params() {
     VERBOSE='false'
     DOWNLOAD='true'
     CHECKSUM='true'
+    INSTALL='false'
 
     for param in "$@"; do
         # skip loop interation?
@@ -87,6 +88,7 @@ _parse_params() {
             --force-download) DOWNLOAD='force' ;;
             --no-download) DOWNLOAD='false' ;;
             --no-checksum) CHECKSUM='false' ;;
+            -i | --install) INSTALL='true' ;;
             -v | --verbose) VERBOSE='true' ;;
             -h | --help)
                 # TODO: build a help
@@ -205,6 +207,10 @@ _package() {
     return 0
 }
 
+_install() {
+    banana -i "${tmpdir}/$filename.mz"
+}
+
 _init() {
     _log 'Extraindo arquivos...'
     pushd "$tmpdir" &>/dev/null
@@ -223,7 +229,11 @@ _init() {
     popd &>/dev/null
     printf '%s\n' "Pacote em ${tmpdir}/$filename.mz"
 
-    # TODO: install option
+    _log 'Instalando...'
+    pushd "$tmpdir" &>/dev/null
+    _install
+    popd &>/dev/null
+    _log 'Instalação concluída' $LSUCCESS
 }
 
 # MAIN
