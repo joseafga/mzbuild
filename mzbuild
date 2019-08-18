@@ -14,6 +14,11 @@ set -e
 [[ -f /usr/lib/bash/realpath ]] && enable -f /usr/lib/bash/realpath realpath
 [[ -f /usr/lib/bash/dirname ]] && enable -f /usr/lib/bash/dirname dirname
 
+# log level type codes
+LERROR=4
+LWARNING=2
+LSUCCESS=1
+lmsg=('' 'Sucesso: ' 'Alerta: ' 'Erro: ')
 
 # INTERNALS
 # ===============
@@ -39,24 +44,35 @@ __ask_confirmation() {
 
 __checksum() {
     if [[ "${1%% *}" == "$2" ]]; then
-        printf '%s\n' "Sucesso: checksum verificado."
+        _log 'Checksum verificado.' $LSUCCESS
     else
-        printf '%s\n' 'Erro: checksum não confere.'
+        _log 'Checksum não confere.' $LERROR
         __ask_confirmation 'Continuar mesmo assim' || exit 1
     fi
 }
 
+# usage: _log <text> [type]
+_log() {
+    if [[ "$VERBOSE" == 'true' ]]; then
+        # all types
+        printf '%s\n' "${lmsg[$2]}${1}"
+    else
+        # only errors or higher
+        [[ "$2" -ge 3 ]] && printf '%s\n' "${lmsg[$2]}${1}"
+    fi
+}
+
 _show_version() {
-    printf '%s\n' "mzbuild 0.1.0-alpha"
+    printf '%s\n' 'mzbuild 0.1.0-alpha'
 }
 
 _parse_params() {
     # based on: https://pretzelhands.com/posts/command-line-flags
-    local skip      # if is set skip next loop interation
+    local skip # if is set skip next loop interation
 
     # set default values (optional)
-    DOWNLOAD='true' # false, force, "whatever"
-    VERBOSE='false' # true, false
+    DOWNLOAD='true'
+    VERBOSE='true'
 
     for param in "$@"; do
         # skip loop interation?
@@ -96,7 +112,7 @@ _parse_params() {
                 fi
 
                 # no matchs :(
-                printf '%s\n' "Parâmetro não reconhecido: $param"
+                _log "Parâmetro não reconhecido: $param"
                 ;;
         esac
     done
@@ -105,11 +121,11 @@ _parse_params() {
 _download() {
     # if file exists not download again
     if [[ ! -f "$1" || "$DOWNLOAD" == 'force' ]]; then
-        printf '%s\n' 'Fazendo o download...'
+        _log 'Fazendo o download...'
         # wget -cq --show-progress "${URL}" -O "$1"
         curl -L --retry 5 --retry-max-time 60 "${URL}" -o "$1"
     else
-        printf '%s\n' "Aviso: $1 arquivo já existe."
+        _log "$1 arquivo já existe." $LWARNING
     fi
 }
 
@@ -122,7 +138,7 @@ _checksum() {
 }
 
 _extract() {
-    printf '%s\n' 'Extraindo arquivos...'
+    _log 'Extraindo arquivos...'
     pushd $tmpdir
 
     # TODO: check if recipe have extract function and run it
@@ -133,18 +149,18 @@ _extract() {
 }
 
 _build() {
-    printf '%s\n' 'Compilando ...........'
+    _log 'Compilando ...........'
     pushd $srcdir
 
     # execute recipe function
     type -p build &>/dev/null && build
 
     popd
-    printf '%s\n' "Sucesso: arquivos em ${tmpdir}/bin"
+    _log "Arquivos em ${tmpdir}/bin" $LSUCCESS
 }
 
 _package() {
-    printf '%s\n' 'Criando pacote...'
+    _log 'Criando pacote...'
     pushd $srcdir
 
     # execute recipe function
@@ -177,9 +193,8 @@ _package() {
     banana -c "$filename.mz"
 
     popd
-    printf '%s\n' "Sucesso: pacote em ${tmpdir}/$filename.mz"
+    _log "Pacote em ${tmpdir}/$filename.mz" $LSUCCESS
 }
-
 
 # MAIN
 # ===============
@@ -194,7 +209,7 @@ main() {
 
     # import recipe file
     if ! source $MZBFILE &>/dev/null; then
-        printf '%s\n' 'Erro: não foi possível importar o aquivo de receita.'
+        _log 'Não foi possível importar o aquivo de receita.' $LERROR
         exit 1
     fi
 
@@ -207,7 +222,7 @@ main() {
 
     # exec as root only
     if [[ $UID -ne 0 ]]; then
-        printf '%s\n' 'A partir daqui é necessário estar como root, faça o login...'
+        _log 'A partir daqui é necessário estar como root, faça o login...'
 
         # TODO: improve $filepath param pass
         pkexec "$(realpath $0)" "$@" "$filepath" --no-download
