@@ -32,6 +32,7 @@ Dependências
 - cURL
 - polkit
 - tar
+- git
 
 Instalação
 ----------
@@ -49,11 +50,15 @@ Uso
 
 As opções disponíveis são:
 
-    --no-download     não faz download
-    --force-download  força download mesmo que o arquivo já exista
-    -V, --version     exibe versão do mzbuild e sai
+    --no-download       não faz download
+    --force-download    força download mesmo que o arquivo já exista
+    --no-checksum       não verifica a soma (checksum)
+    -i, --install       instala pacote após sua criação
+    -v, --verbose       exibe mensagens de informação, sucesso e alerta
+    -h, --help          exibe está ajuda e sai
+    -V, --version       exibe versão do mzbuild e sai
 
-Opções para instalar após criar o pacote e verbose já estão nos planos, outras sugestões são bem-vindas.
+> Sugestões de outras opções são bem-vindas.
 
 Licença
 ------

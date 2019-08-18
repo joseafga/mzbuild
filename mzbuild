@@ -3,7 +3,7 @@
 # mzbuild - Build helper for bananapkg
 #
 # version:
-#   0.1.0a
+#   0.2.0a
 # author:
 #   José Almeida <jose.afga@gmail.com>
 
@@ -64,7 +64,7 @@ _log() {
 }
 
 _show_version() {
-    printf '%s\n' 'mzbuild 0.1.0-alpha'
+    printf '%s\n' 'mzbuild 0.2.0-alpha'
 }
 
 _show_help() {
@@ -152,6 +152,8 @@ _download() {
     else
         _log "$1 arquivo já existe." $LWARNING
     fi
+
+    return 0
 }
 
 _checksum() {
@@ -240,7 +242,6 @@ _init() {
     pushd "$srcdir" &>/dev/null
     _build
     popd &>/dev/null
-    _log "Arquivos em ${bindir}" $LSUCCESS
 
     _log 'Criando pacote...'
     pushd "$srcdir" &>/dev/null
