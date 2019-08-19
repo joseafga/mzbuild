@@ -50,13 +50,13 @@ Usage
 
 The available options are:
 
-    --no-download       don't download
-    --force-download    force download even if file exists
-    --no-checksum       don't checksum
-    -i, --install       install package after creation
-    -v, --verbose       display infomation, success and warning messages
-    -h, --help          display this help and exit
-    -V, --version       display mzbuild version and exit
+        --no-download       don't download
+        --force-download    force download even if file exists
+        --no-checksum       don't checksum
+    -i, --install           install package after creation
+    -v, --verbose           display infomation, success and warning messages
+    -h, --help              display this help and exit
+    -V, --version           display mzbuild version and exit
 
 > Suggestions of other options are welcome.
 

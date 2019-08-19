@@ -75,7 +75,7 @@ Opções:
         --no-checksum       não verifica a soma (checksum)
     -i, --install           instala pacote após sua criação
     -v, --verbose           exibe mensagens de informação, sucesso e alerta
-    -h, --help              exibe está ajuda e sai
+    -h, --help              exibe essa ajuda e sai
     -V, --version           exibe versão do mzbuild e sai"
 }
 
