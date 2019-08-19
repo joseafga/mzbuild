@@ -221,13 +221,8 @@ _package() {
 }
 
 _install() {
-    # check if is already installed and remove it
-    for file in "/var/lib/banana/list/${NAME}-"*; do
-        # FIXME: possible false positve?
-        [[ -f $file ]] && banana -r -y "${NAME}"
-    done
-
-    banana -i "${tmpdir}/$filename.mz"
+    # try update if exits or install it
+    banana -u -y "${tmpdir}/$filename.mz" || banana -i "${tmpdir}/$filename.mz"
 
     return 0
 }
