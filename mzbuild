@@ -52,13 +52,13 @@ __checksum() {
 
 # usage: _log <text> [type]
 _log() {
-    if [[ "$VERBOSE" == 'true' ]]; then
-        # all types
+    if [[ "$VERBOSE" == 'true' && ! "$2" -ge 3 ]]; then
+        # info, success, warnings ...
         printf '%s\n' "${lmsg[$2]}${1}"
-    else
-        # only errors or higher
-        [[ "$2" -ge 3 ]] && printf '%s\n' "${lmsg[$2]}${1}"
     fi
+
+    # only errors or higher to stderr
+    [[ "$2" -ge 3 ]] && printf '%s\n' "${lmsg[$2]}${1}" >&2
 
     return 0
 }
