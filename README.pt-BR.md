@@ -27,11 +27,8 @@ Por fim temos as funções executadas em determinados momentos do processo. Atua
 
 Dependências
 ----------
-- bash
-- coreutils
-- cURL
+- bananapkg
 - polkit
-- tar
 - git
 
 Instalação

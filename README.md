@@ -27,11 +27,8 @@ Finally we have the functions called at certain times in the process. Currently 
 
 Dependencies
 ----------
-- bash
-- coreutils
-- cURL
+- bananapkg
 - polkit
-- tar
 - git
 
 Installation
