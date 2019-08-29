@@ -15,7 +15,7 @@ set -e
 [[ -f /usr/lib/bash/dirname ]] && enable -f /usr/lib/bash/dirname dirname
 
 # log level type codes
-LERROR=4
+LERROR=3
 LWARNING=2
 LSUCCESS=1
 lmsg=('' 'Sucesso: ' 'Alerta: ' 'Erro: ')
@@ -52,13 +52,13 @@ __checksum() {
 
 # usage: _log <text> [type]
 _log() {
-    if [[ "$VERBOSE" == 'true' && ! "$2" -ge 3 ]]; then
+    if [[ "$2" -ge $LERROR ]]; then
+        # only errors or higher to stderr
+        printf '%s\n' "${lmsg[$2]}${1}" >&2
+    else
         # info, success, warnings ...
-        printf '%s\n' "${lmsg[$2]}${1}"
+        [[ "$VERBOSE" == 'true' ]] && printf '%s\n' "${lmsg[$2]}${1}"
     fi
-
-    # only errors or higher to stderr
-    [[ "$2" -ge 3 ]] && printf '%s\n' "${lmsg[$2]}${1}" >&2
 
     return 0
 }
