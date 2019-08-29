@@ -18,7 +18,7 @@ set -e
 LERROR=3
 LWARNING=2
 LSUCCESS=1
-lmsg=('' 'Sucesso: ' 'Alerta: ' 'Erro: ')
+lmsg=('' $'\e[32mSucesso\e[0m: ' $'\e[33mAlerta\e[0m: ' $'\e[31mErro\e[0m: ')
 
 # INTERNALS
 # ===============
@@ -150,7 +150,7 @@ _download() {
             fi
         }
     else
-        _log "$1 arquivo já existe." $LWARNING
+        _log "O arquivo $1 já existe." $LWARNING
     fi
 
     return 0
@@ -233,12 +233,12 @@ _init() {
     _extract "$filedir/$filename"
     popd &>/dev/null
 
-    _log 'Compilando...........'
+    _log 'Compilando......'
     pushd "$srcdir" &>/dev/null
     _build
     popd &>/dev/null
 
-    _log 'Criando pacote...'
+    _log 'Empacotando...'
     pushd "$srcdir" &>/dev/null
     _package
     popd &>/dev/null
