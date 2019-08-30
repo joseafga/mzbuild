@@ -35,6 +35,9 @@ __desc_replace() {
 __ask_confirmation() {
     local answer
 
+    # skip confirmation with -y option
+    [[ "$NOCONFIRM" == 'true' ]] && return 0
+
     printf '%s' "${1} Continuar? [s/N]: "
     read answer
 
@@ -70,13 +73,14 @@ _show_version() {
 _show_help() {
     printf '%s\n\n' "mzbuild [opções] <arquivo>
 Opções:
-        --no-download       não faz download
-        --force-download    força download mesmo que o arquivo já exista
-        --no-checksum       não verifica a soma (checksum)
-    -i, --install           instala pacote após sua criação
-    -v, --verbose           exibe mensagens de informação, sucesso e alerta
-    -h, --help              exibe essa ajuda e sai
-    -V, --version           exibe versão do mzbuild e sai"
+        --no-download       Não faz download
+        --force-download    Força download mesmo que o arquivo já exista
+        --no-checksum       Não verifica a soma (checksum)
+    -y, --no-confirm        Não pergunta por confirmações
+    -i, --install           Instala pacote após sua criação
+    -v, --verbose           Exibe mensagens de informação, sucesso e alerta
+    -h, --help              Exibe essa ajuda e sai
+    -V, --version           Exibe versão do mzbuild e sai"
 }
 
 _parse_params() {
@@ -87,6 +91,7 @@ _parse_params() {
     VERBOSE='false'
     DOWNLOAD='true'
     CHECKSUM='true'
+    NOCONFIRM='false'
     INSTALL='false'
 
     for param in "$@"; do
@@ -100,6 +105,7 @@ _parse_params() {
             --force-download) DOWNLOAD='force' ;;
             --no-download) DOWNLOAD='false' ;;
             --no-checksum) CHECKSUM='false' ;;
+            -y | --no-confirm) NOCONFIRM='true' ;;
             -i | --install) INSTALL='true' ;;
             -v | --verbose) VERBOSE='true' ;;
             -h | --help)

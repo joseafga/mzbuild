@@ -47,13 +47,14 @@ Usage
 
 The available options are:
 
-        --no-download       don't download
-        --force-download    force download even if file exists
-        --no-checksum       don't checksum
-    -i, --install           install package after creation
-    -v, --verbose           display infomation, success and warning messages
-    -h, --help              display this help and exit
-    -V, --version           display mzbuild version and exit
+        --no-download       Don't download
+        --force-download    Force download even if file exists
+        --no-checksum       Don't checksum
+    -y, --no-confirm        Do not ask for confirmation
+    -i, --install           Install package after creation
+    -v, --verbose           Display infomation, success and warning messages
+    -h, --help              Display this help and exit
+    -V, --version           Display mzbuild version and exit
 
 > Suggestions of other options are welcome.
 

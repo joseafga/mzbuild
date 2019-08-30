@@ -47,13 +47,14 @@ Uso
 
 As opções disponíveis são:
 
-        --no-download       não faz download
-        --force-download    força download mesmo que o arquivo já exista
-        --no-checksum       não verifica a soma (checksum)
-    -i, --install           instala pacote após sua criação
-    -v, --verbose           exibe mensagens de informação, sucesso e alerta
-    -h, --help              exibe a ajuda e sai
-    -V, --version           exibe versão do mzbuild e sai
+        --no-download       Não faz download
+        --force-download    Força download mesmo que o arquivo já exista
+        --no-checksum       Não verifica a soma (checksum)
+    -y, --no-confirm        Não pergunta por confirmações
+    -i, --install           Instala pacote após sua criação
+    -v, --verbose           Exibe mensagens de informação, sucesso e alerta
+    -h, --help              Exibe essa ajuda e sai
+    -V, --version           Exibe versão do mzbuild e sai"
 
 > Sugestões de outras opções são bem-vindas.
 
