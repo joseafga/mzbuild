@@ -13,7 +13,7 @@ A construção de um pacote com o BananaPKG é uma tarefa simples, porém acredi
 
 Receitas
 ----------
-Assim como o `.spec`, `.PKGBUILD`, `.SlackBuild`, aqui também existe um arquivo com a receita a ser seguida, não é obrigatório uma extensão específica, porém é recomendado `.mzb.sh`. Dessa forma fica explícito que se trata de um *shell script*, como também faz referência ao **mzb**uild.
+Assim como o `.spec`, `PKGBUILD`, `.SlackBuild`, aqui também existe um arquivo com a receita a ser seguida, não é obrigatório uma extensão específica, porém é recomendado `.mzb.sh`. Dessa forma fica explícito que se trata de um *shell script*, como também faz referência ao **mzb**uild.
 
 As variáveis do arquivo são muito semelhantes ao do arquivo *desc* do BananaPKG e possuem nomes bem sugestivos, o que acredito que dispense explicações.
 
@@ -23,7 +23,7 @@ O *array* `makedeps` é um adicional as dependências do pacote, sendo essas nec
 
 Por fim temos as funções executadas em determinados momentos do processo. Atualmente há a função `build()`, executada logo após a extração, deve ser utilizada para a configuração e compilação da aplicação. Enquanto a função `package()` é executada após a `build()` e antes do empacotamento com o BananaPKG, deve ser utilizada para instalar/copiar os arquivos na `bindir` (variável que contém o caminho do diretório correspondente a raiz do pacote).
 
-> Veja exemplos em [mzbuild-packages](https://github.com/joseafga/mzbuild-packages)
+> Veja exemplos em [mazonos-packages](https://github.com/joseafga/mazonos-packages)
 
 Dependências
 ----------

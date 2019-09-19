@@ -13,7 +13,7 @@ Building a package with BananaPKG is a simple task but I believe that automating
 
 Recipes
 ----------
-As the `.spec`,` .PKGBUILD`, `.SlackBuild`, there is also a file with the recipe to follow, no specific extension is required but `.mzb.sh` is recommended. This make it explicit that it is a shell script as it also refers to **mzb**uild.
+As the `.spec`, `PKGBUILD`, `.SlackBuild`, there is also a file with the recipe to follow, no specific extension is required but `.mzb.sh` is recommended. This make it explicit that it is a shell script as it also refers to **mzb**uild.
 
 The file variables are very similar to BananaPKG's *desc* file and have very suggestive names which I believe needs no explanation.
 
@@ -23,7 +23,7 @@ The *array* `makedeps` is an additional package dependency which is only needed 
 
 Finally we have the functions called at certain times in the process. Currently there is the `build ()` function called right after extraction which should be used for configuration and compilation of the application. While the `package ()` function is executed right after `build ()` and before packaging with BananaPKG, it should be used to install/copy files in `bindir` (variable containing the directory path corresponding to the package root).
 
-> See examples in [mzbuild-packages](https://github.com/joseafga/mzbuild-packages)
+> See examples in [mazonos-packages](https://github.com/joseafga/mazonos-packages)
 
 Dependencies
 ----------
