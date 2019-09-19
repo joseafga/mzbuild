@@ -226,6 +226,23 @@ _package() {
     return 0
 }
 
+_package_scripts() {
+    local script
+
+    if type -p presh &>/dev/null; then
+        # get only braces content of function declaration
+        script="$(declare -f presh)"
+        script="${script#*\{}"
+        script="${script%\}*}"
+
+        # to file
+        printf '%s\n' "$script" >pre.sh
+    fi
+
+    type -p possh &>/dev/null && echo
+    type -p rmsh &>/dev/null && echo
+}
+
 _install() {
     # try update if exits or install it
     banana -u -y "${tmpdir}/$filename.mz" || banana -i "${tmpdir}/$filename.mz"
