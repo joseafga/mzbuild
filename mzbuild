@@ -65,7 +65,7 @@ __func2file() {
         script="${script%\}*}"
 
         # to file
-        printf '%s\n' "$script" >$2
+        printf '%s\n' "$script" >|$2
     fi
 }
 
@@ -234,9 +234,9 @@ _package() {
     printf '%s\n' "$bananadesc" >|"$bindir/info/desc"
 
     # if functions exists create pos.sh, pre.sh and rm.sh
-    __func2file 'before_install' 'pre.sh'
-    __func2file 'after_install' '.sh'
-    __func2file 'after_remove' 'rm.sh'
+    __func2file 'before_install' "$bindir/info/pre.sh"
+    __func2file 'after_install' "$bindir/info/pos.sh"
+    __func2file 'before_remove' "$bindir/info/rm.sh"
 
     banana -c "$filename.mz" || _log "Houveram erros na criação do pacote." $LWARNING
 
