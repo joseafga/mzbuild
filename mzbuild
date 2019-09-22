@@ -185,19 +185,17 @@ _checksum() {
     return 0
 }
 
-_extract() {
-    # execute recipe function
-    type -p extract &>/dev/null && extract || {
-        # do nothing if .git
-        [[ "$extension" == 'git' ]] && return 0
+# recipe extract override mzbuild extract function
+extract() {
+    # do nothing if .git
+    [[ "$extension" == 'git' ]] && return 0
 
-        # extract in source dir
-        if [[ "$VERBOSE" == 'true' ]]; then
-            tar -xvf "$1" --one-top-level=src
-        else
-            tar -xf "$1" --one-top-level=src
-        fi
-    }
+    # extract in source dir
+    if [[ "$VERBOSE" == 'true' ]]; then
+        tar -xvf "$1" --one-top-level=src
+    else
+        tar -xf "$1" --one-top-level=src
+    fi
 
     return 0
 }
@@ -255,7 +253,7 @@ _install() {
 _init() {
     _log 'Extraindo arquivos...'
     pushd "$tmpdir" &>/dev/null
-    _extract "$filedir/$filename"
+    extract "$filedir/$filename"
     popd &>/dev/null
 
     _log 'Compilando......'
