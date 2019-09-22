@@ -45,11 +45,27 @@ __ask_confirmation() {
     [[ "$answer" =~ ^[sSyY] ]]
 }
 
+# compare function checksum output with expected checksum
 __checksum() {
     if [[ "${1%% *}" == "$2" ]]; then
         _log 'Checksum do arquivo verificado.' $LSUCCESS
     else
         __ask_confirmation "$(_log 'Checksum do arquivo não confere.' $LERROR)" || exit 1
+    fi
+}
+
+# usage: __func2file <function> <file>
+__func2file() {
+    local script
+
+    if type -p $1 &>/dev/null; then
+        # get only braces content of function declaration
+        script="$(declare -f $1)"
+        script="${script#*\{}"
+        script="${script%\}*}"
+
+        # to file
+        printf '%s\n' "$script" >$2
     fi
 }
 
@@ -219,28 +235,14 @@ _package() {
     # write info/desc new content
     printf '%s\n' "$bananadesc" >|"$bindir/info/desc"
 
-    # TODO: create pos.sh, pre.sh and rm.sh
+    # if functions exists create pos.sh, pre.sh and rm.sh
+    __func2file 'before_install' 'pre.sh'
+    __func2file 'after_install' '.sh'
+    __func2file 'after_remove' 'rm.sh'
 
     banana -c "$filename.mz" || _log "Houveram erros na criação do pacote." $LWARNING
 
     return 0
-}
-
-_package_scripts() {
-    local script
-
-    if type -p presh &>/dev/null; then
-        # get only braces content of function declaration
-        script="$(declare -f presh)"
-        script="${script#*\{}"
-        script="${script%\}*}"
-
-        # to file
-        printf '%s\n' "$script" >pre.sh
-    fi
-
-    type -p possh &>/dev/null && echo
-    type -p rmsh &>/dev/null && echo
 }
 
 _install() {
